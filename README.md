@@ -11,4 +11,4 @@ The attached soccer.dat file contains the results from the English Premier Leagu
 
 Question #3:
 Is the way you wrote the second program influenced by writing the first?
-- Though the requirements are slightly different for each problem, I was able to re-use some of the logic (finding the difference between two row values, sorting by the added column to identify the smallest value) from the first solution in the second solution.
+- Though the requirements are slightly different for each problem, I was able to re-use some of the logic applied in the first solution within the second solution through the use of a common functions file. This way, I was able to re-use code written to import the data into a Pandas DataFrame, and find the difference between two values within a row.
