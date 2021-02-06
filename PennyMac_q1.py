@@ -1,43 +1,36 @@
-import pandas as pd
+"""
+program to determine which day had the smallest temperature difference
+data is initially imported to Pandas DataFrame
+columns used to preform the difference calculation are cleaned
+difference between max and min temperatures is calculated and stored in new column
+data is sorted by that new 'difference' column
+the day number of the top row is selected from the sorted DataFrame
+"""
 
-def import_data(filename):
-    """
-    imports the given file to a Pandas DataFrame object
-    removes any rows containing null values
-    returns the Pandas DataFrame object
-    """
-    df = pd.read_csv(filename, 
-                 sep = '\s+',
-                 header = 2,
-                 skiprows = 1, 
-                 usecols = [0,1,2])
-    df = df.dropna()
-    return df
+import pandas as pd
+import PennyMac_fucntions as pmf
+
 
 def temperature_clean(temperature):
     """
     cleans any temperature values containing an asterisks
     returns a float of the cleaned temperature values
     """
-    clean_temperature = temperature.replace('*','')
-    float_temperature = float(clean_temperature)
-    return float_temperature
+    clean_temperature = temperature.replace('*', '')
+    int_temperature = int(clean_temperature)
+    return int_temperature
 
-def temperature_diff(row):
-    """
-    calculates the difference between max temperature and min temperature in a row
-    returns the temperature difference
-    """
-    temperature_diff = temperature_clean(row['MxT']) - temperature_clean(row['MnT'])
-    return temperature_diff
 
 def main():
-    df = import_data("w_data.dat")
-    df['Diff'] = df.apply (lambda row: temperature_diff(row), axis=1)
+    df = pmf.import_data("w_data.dat", 2, 1, [0, 1, 2])
+    df = df[df['Dy'] != 'mo']
+    df['MxT'] = df.apply(lambda row: temperature_clean(row['MxT']), axis=1)
+    df['MnT'] = df.apply(lambda row: temperature_clean(row['MnT']), axis=1)
+    df['Diff'] = df.apply(lambda row: pmf.difference(row, 'MxT', 'MnT'), axis=1)
     df = df.sort_values('Diff')
     day_num = df['Dy'].iloc[0]
-    print("day", day_num, "had the smallest temperature spread")
+    print(f"day {day_num} had the smallest temperature spread")  # 14
+
 
 if __name__ == "__main__":
     main()
-
